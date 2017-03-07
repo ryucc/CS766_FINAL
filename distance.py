@@ -4,6 +4,22 @@ import cv2
 from matplotlib import pyplot as plt
 import sys
 
+def getVelCost(i, j, v, max_threshold):
+    cost = 0.0
+    cost = abs((j-i)-v)
+    cost = cost*cost
+    cost = min(cost, max_threshold)
+
+    return cost
+
+def getAcclCost(h, i, j, max_threshold):
+    cost = 0.0
+    cost = abs((j-i)-(i-h))
+    cost = cost*cost
+    cost = min(cost, max_threshold)
+
+    return cost
+
 img1 = cv2.imread(sys.argv[1],0)
 img2 = cv2.imread(sys.argv[2],0)
 
@@ -60,4 +76,3 @@ for i in range(num_points):
     bb = bb/bb[2]
     tot = tot+ np.linalg.norm(homo2[i,0:2]-bb[0:2])
 print tot/num_points
-
