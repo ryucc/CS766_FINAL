@@ -4,6 +4,7 @@ import cv2
 from matplotlib import pyplot as plt
 import sys
 
+
 def getVelCost(i, j, v, max_threshold):
     cost = 0.0
     cost = abs((j-i)-v)
@@ -19,6 +20,7 @@ def getAcclCost(h, i, j, max_threshold):
     cost = min(cost, max_threshold)
 
     return cost
+
 def getAlignmentCost(frame1,frame2):
     img1 = frame1
     img2 = frame2
@@ -76,6 +78,7 @@ def getAlignmentCost(frame1,frame2):
         bb = bb/bb[2]
         tot = tot+ np.linalg.norm(homo2[i,0:2]-bb[0:2])
     return tot/num_points
+
 if __name__=="__main__":
     i1 = cv2.imread(sys.argv[1])
     i2 = cv2.imread(sys.argv[2])
