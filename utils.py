@@ -13,18 +13,23 @@ def showCorrespondence(orig_img,warped_img,x,y):
         temp = np.zeros([height1,width1+width2,3],dtype=warped_img.dtype)
         temp[:height2,:width2,:] = warped_img
         temp[:,width2:width2+width1,:] = orig_img
-        imshow('aaa',temp)
-        waitKey(0)
 
-    elif height2>height1:
+    elif height2 >= height1:
         temp = np.zeros([height2,width1+width2,3],dtype = orig_img.dtype)
         temp[:height1,:width1,:] = orig_img
         temp[:,width1:width1+width2,:] = warped_img
-        imshow('aaa',temp)
-        waitKey(0)
+    for i in range(len(x)):
+        xx = x[i]
+        yy = y[i]
+        yy = (yy[0]+width2, yy[1])
+        cv2.line(temp,xx,yy,(255,0,0))
+    imshow('aaa',temp)
+    waitKey(0)
+
+
 
 
 if __name__ == '__main__':
     a = cv2.imread(sys.argv[1])
     b = cv2.imread(sys.argv[2])
-    showCorrespondence(a,b,0,0)
+    showCorrespondence(a,b,[(10,10)],[(200,50)])
