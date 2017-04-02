@@ -48,9 +48,10 @@ def dp(frames):
 if __name__ == "__main__":
     #print cv2.__version__
 
-    frames = video.readVideo(sys.argv[1]);
+    frames  = video.readVideo(sys.argv[1]);
+    outFile = sys.argv[2];
     idxList = dp(frames)
-    video.writeVideo('test.mp4', frames, idxList)
+    video.writeVideo(outFile, frames, idxList)
 
     print len(frames), len(idxList)
     print "done"
