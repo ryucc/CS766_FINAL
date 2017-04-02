@@ -18,7 +18,11 @@ def readVideo(filename):
     return frames
 
 def writeVideo(filename, frames, idxList):
-    os.remove(filename)
+    try:
+        os.remove(filename)
+    except:
+        print "No such file!"
+
     height , width , layers =  frames[0].shape
     print width, height, layers
 
