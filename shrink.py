@@ -25,7 +25,7 @@ if __name__ == "__main__":
     cap = cv2.VideoCapture(sys.argv[1])
     ret, frame = cap.read()
     height , width , layers =  frame.shape
-    out = cv2.VideoWriter(sys.argv[2], fourcc, 30.0, (width,height))
+    out = cv2.VideoWriter(sys.argv[2], fourcc, 30.0, (width/2,height/2))
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret==True:
@@ -33,8 +33,8 @@ if __name__ == "__main__":
             # write the flipped frame
             frame = cv2.resize(frame,(width/2,height/2))
             out.write(frame)
-            cv2.imshow('frame',frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            #cv2.imshow('frame',frame)
+            #if cv2.waitKey(1) & 0xFF == ord('q'):
+                #break
         else:
             break
