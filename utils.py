@@ -3,6 +3,42 @@ import cv2
 from cv2 import *
 import sys
 
+def intTuple(x):
+    return (int(x[0]),int(x[1]))
+
+def showKeypoints(frame1,frame2):
+    img1 = frame1
+    img2 = frame2
+
+    # Initiate STAR detector
+    harris = cv2.FeatureDetector_create("HARRIS")
+
+    # Initiate BRIEF extractor
+    brief = cv2.DescriptorExtractor_create("BRIEF")
+
+    # find the keypoints with STAR
+    kp1 = harris.detect(img1,None)
+    kp2 = harris.detect(img2,None)
+
+    # compute the descriptors with BRIEF
+    kp1, des1 = brief.compute(img1, kp1)
+    kp2, des2 = brief.compute(img2, kp2)
+
+    # match keypoints with bruteforce
+    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+    matches = bf.match(des1,des2)
+
+    matches = sorted(matches, key = lambda x:x.distance)
+    
+    x = []
+    y = []
+    for i in matches[0:20]:
+        #print i.distance,i.trainIdx,i.queryIdx,i.imgIdx
+        y.append(intTuple(kp1[i.queryIdx].pt))
+        x.append(intTuple(kp2[i.trainIdx].pt))
+    showCorrespondence(img1,img2,x,y)
+ 
+
 def showCorrespondence(orig_img,warped_img,x,y):
     height1 = orig_img.shape[0]
     width1 = orig_img.shape[1]
@@ -32,4 +68,4 @@ def showCorrespondence(orig_img,warped_img,x,y):
 if __name__ == '__main__':
     a = cv2.imread(sys.argv[1])
     b = cv2.imread(sys.argv[2])
-    showCorrespondence(a,b,[(10,10)],[(200,50)])
+    showKeypoints(a,b)
