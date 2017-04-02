@@ -2,13 +2,15 @@
 import cv2
 import sys
 import numpy as np
-import readvideo as video
+import video
 import distance as dis
+from distance import VELOCITY
 
 def dp(frames):
     # parameters
     GAP = 20
-    WDN = 30
+    WDN = 5
+    START = VELOCITY - (WDN/2)
     T = len(frames)
 
     # dp array
@@ -17,8 +19,8 @@ def dp(frames):
     for i in range(GAP, T):
         D[i] = dis.getCostWoAcc(frames, i, i-1) + D[i-1]
         P[i] = i-1
-        for w in range(2, WDN+1):
-            j = i - w
+        for w in range(0, WDN):
+            j = i - START - w
             if(j < GAP):
                 break
             cur = dis.getCostWoAcc(frames, i, j)+ D[j]
@@ -38,13 +40,17 @@ def dp(frames):
     cur = min_end
 
     while cur > GAP:
-        print cur
         cur = P[cur]
         path = [cur] + path
+
     return path
 
 if __name__ == "__main__":
-    print cv2.__version__
+    #print cv2.__version__
+
     frames = video.readVideo(sys.argv[1]);
-    dp(frames)
+    idxList = dp(frames)
+    video.writeVideo('test.mp4', frames, idxList)
+
+    print len(frames), len(idxList)
     print "done"
