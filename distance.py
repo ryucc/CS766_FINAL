@@ -4,11 +4,12 @@ import cv2
 from matplotlib import pyplot as plt
 import sys
 
+VELOCITY = 10
+MAX_VEL_THRES = 20
+
 def getCostWoAcc(frames, i, j):
-    VELOCITY  = 10
-    MAX_THRES = 20
     align_cost = getAlignmentCost(frames[i], frames[j])
-    vel_cost   = getVelCost(i, j, VELOCITY, MAX_THRES)
+    vel_cost   = getVelCost(i, j, VELOCITY, MAX_VEL_THRES)
     return align_cost + vel_cost
 
 def getVelCost(i, j, v, max_threshold):
