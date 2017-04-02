@@ -2,13 +2,13 @@
 import cv2
 import sys
 import numpy as np
-import readvideo as video
+import video
 import distance as dis
 
 def dp(frames):
     # parameters
     GAP = 20
-    WDN = 30
+    WDN = 10
     T = len(frames)
 
     # dp array
@@ -38,13 +38,15 @@ def dp(frames):
     cur = min_end
 
     while cur > GAP:
-        print cur
         cur = P[cur]
         path = [cur] + path
     return path
 
 if __name__ == "__main__":
-    print cv2.__version__
+    #print cv2.__version__
+
     frames = video.readVideo(sys.argv[1]);
-    dp(frames)
+    idxList = dp(frames)
+    video.writeVideo('test.mp4', frames, idxList)
+
     print "done"
