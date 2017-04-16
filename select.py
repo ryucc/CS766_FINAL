@@ -4,13 +4,12 @@ import sys
 import numpy as np
 import video
 import distance as dis
-from distance import VELOCITY
 from utils import *
 from matplotlib.pylab import gca, figure, plot, subplot, title, xlabel, ylabel, xlim,show
 from matplotlib.lines import Line2D
 import segment
 import fit
- 
+
 max_error = 1000
 def draw_plot(data,plot_title):
     plot(range(len(data)),data,alpha=0.8,color='red')
@@ -25,7 +24,7 @@ def draw_segments(segments):
         line = Line2D((segment[0],segment[2]),(segment[1],segment[3]))
         ax.add_line(line)
 
-      
+
 
 def subsequence(X):
     """Returns the Longest Increasing Subsequence in the Given List/Array"""
@@ -42,14 +41,14 @@ def subsequence(X):
                lo = mid+1
            else:
                hi = mid-1
- 
+
        newL = lo
        P[i] = M[newL-1]
        M[newL] = i
- 
+
        if (newL > L):
            L = newL
- 
+
     S = []
     k = M[L]
     steps = [k]
@@ -92,7 +91,7 @@ if __name__ == "__main__":
             bbb[i] = bbb[i] + st
         pts = pts + bbb
     plot_points(datax,pts)
-    
+
 '''
     segments = segment.topdownsegment(datay.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
     indy = [x[0] for x in segments]

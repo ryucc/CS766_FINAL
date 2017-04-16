@@ -36,8 +36,8 @@ def writeVideo(filename, frames, idxList):
     height , width , layers =  frames[0].shape
     print width, height, layers
 
-    #fourcc = cv2.cv.CV_FOURCC('P','I','M','4')
-    fourcc = cv2.cv.CV_FOURCC(*'X264')
+    #fourcc = cv2.cv.CV_FOURCC(*'X264')
+    fourcc = cv2.cv.CV_FOURCC(*'XVID')
     out = cv2.VideoWriter(filename, fourcc, 30.0, (width,height))
 
     for i in range(0, len(idxList)):
