@@ -27,7 +27,7 @@ if __name__ == "__main__":
     except:
         print "No such file!"
 
-    fourcc = cv2.cv.CV_FOURCC(*'X264')
+    fourcc = cv2.cv.CV_FOURCC(*'XVID')
     cap1 = cv2.VideoCapture(sys.argv[1])
     cap2 = cv2.VideoCapture(sys.argv[2])
     ret1, frame1 = cap1.read()
