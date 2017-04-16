@@ -9,7 +9,7 @@ from matplotlib.pylab import gca, figure, plot, subplot, title, xlabel, ylabel, 
 from matplotlib.lines import Line2D
 import segment
 import fit
- 
+
 max_error = 1000
 def draw_plot(data,plot_title):
     plot(range(len(data)),data,alpha=0.8,color='red')
@@ -24,7 +24,7 @@ def draw_segments(segments):
         line = Line2D((segment[0],segment[2]),(segment[1],segment[3]))
         ax.add_line(line)
 
-      
+
 
 def subsequence(X):
     """Returns the Longest Increasing Subsequence in the Given List/Array"""
@@ -41,14 +41,14 @@ def subsequence(X):
                lo = mid+1
            else:
                hi = mid-1
- 
+
        newL = lo
        P[i] = M[newL-1]
        M[newL] = i
- 
+
        if (newL > L):
            L = newL
- 
+
     S = []
     k = M[L]
     steps = [k]
