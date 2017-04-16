@@ -2,12 +2,22 @@
 import cv2
 import sys, os
 
-def readVideo(filename):
+def readVideo(filename,n = None):
     cap = cv2.VideoCapture(filename)
     frames = []
     ret,f = cap.read()
     fps = cap.get(cv2.cv.CV_CAP_PROP_FPS)
     print fps
+    if n:
+        i = 0
+        while ret and i<n:
+            #cv2.imshow('aaa',f);
+            #cv2.waitKey(1);
+            frames = frames +[f]
+            ret,f = cap.read()
+            i = i+1
+        cap.release()
+        return frames
 
     while ret:
         #cv2.imshow('aaa',f);
@@ -34,7 +44,6 @@ def writeVideo(filename, frames, idxList):
         idx = idxList[i]
         out.write(frames[idx])
     out.release()
-
 
 if __name__ == "__main__":
     frames = readVideo(sys.argv[1]);

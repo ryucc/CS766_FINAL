@@ -6,7 +6,26 @@ import video
 import distance as dis
 from distance import VELOCITY
 from utils import *
-       
+from matplotlib.pylab import gca, figure, plot, subplot, title, xlabel, ylabel, xlim,show
+from matplotlib.lines import Line2D
+import segment
+import fit
+ 
+max_error = 1000
+def draw_plot(data,plot_title):
+    plot(range(len(data)),data,alpha=0.8,color='red')
+    title(plot_title)
+    xlabel("Samples")
+    ylabel("Signal")
+    xlim((0,len(data)-1))
+
+def draw_segments(segments):
+    ax = gca()
+    for segment in segments:
+        line = Line2D((segment[0],segment[2]),(segment[1],segment[3]))
+        ax.add_line(line)
+
+      
 
 def subsequence(X):
     """Returns the Longest Increasing Subsequence in the Given List/Array"""
@@ -54,17 +73,29 @@ def gen_xyrs(frames):
         ty = np.append(ty,ty[i]+np.mean(a[:,1]))
     return tx,ty
 
-def find_jumps(frames):
-    '''
-    returns the frames that there is a huge change
-    '''
-
-def cut_segmetns(frames): 
-    '''
-    find segments of response time
-    '''
-
 if __name__ == "__main__":
     #print cv2.__version__
-    frames  = video.readVideo(sys.argv[1],300);
-    print select(frames);
+    frames  = video.readVideo(sys.argv[1],3000);
+    figure()
+    datax,datay = gen_xyrs(frames)
+    segments = segment.topdownsegment(datax.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
+    pts = []
+    for i in range(len(segments)):
+        seg = segments[i]
+        st = seg[0]
+        ed = seg[2]
+        if seg[3] > seg[1]:
+            aaa, bbb = subsequence(datax[st:ed])
+        else:
+            aaa, bbb = subsequence(-datax[st:ed])
+        for i in range(len(bbb)):
+            bbb[i] = bbb[i] + st
+        pts = pts + bbb
+    plot_points(datax,pts)
+    
+'''
+    segments = segment.topdownsegment(datay.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
+    indy = [x[0] for x in segments]
+    indy = indy + [segments[-1][2]]
+    print indy
+'''
