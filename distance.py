@@ -5,6 +5,7 @@ import sys
 
 VELOCITY = 10
 MAX_VEL_THRES = 20
+PENALTY = 1000
 
 def getCostWoAcc(frames, i, j):
     align_cost = getAlignmentCost(frames[i], frames[j])
@@ -45,12 +46,18 @@ def getAlignmentCost(frame1,frame2):
     kp1, des1 = brief.compute(img1, kp1)
     kp2, des2 = brief.compute(img2, kp2)
 
+    if(len(kp1) < 1  or len(kp2) < 1):
+        return PENALTY
+
     # match keypoints with bruteforce
     bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     matches = bf.match(des1,des2)
 
     # Sort them in the order of their distance.
     matches = sorted(matches, key = lambda x:x.distance)
+
+    if(len(matches) < 1):
+        return PENALTY
 
     # get coordinates of the matched points
     pts1 = np.array([0,0])
@@ -64,6 +71,9 @@ def getAlignmentCost(frame1,frame2):
         pts2 = np.vstack((pts2,npoint2))
 
     # Find Homography
+    if(len(pts1) < 4 or len(pts2) < 4 ):
+        return PENALTY
+
     h,status = cv2.findHomography(pts1,pts2,method=cv2.RANSAC)
 
     # change into homogenious coordinates
