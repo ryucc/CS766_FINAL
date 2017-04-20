@@ -24,8 +24,6 @@ def draw_segments(segments):
         line = Line2D((segment[0],segment[2]),(segment[1],segment[3]))
         ax.add_line(line)
 
-
-
 def subsequence(X):
     """Returns the Longest Increasing Subsequence in the Given List/Array"""
     N = len(X)
@@ -74,7 +72,7 @@ def gen_xyrs(frames):
 
 if __name__ == "__main__":
     #print cv2.__version__
-    frames  = video.readVideo(sys.argv[1],3000);
+    frames  = video.readVideo(sys.argv[1], 2000);
     figure()
     datax,datay = gen_xyrs(frames)
     segments = segment.topdownsegment(datax.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
