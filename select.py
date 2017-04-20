@@ -24,6 +24,8 @@ def draw_segments(segments):
         line = Line2D((segment[0],segment[2]),(segment[1],segment[3]))
         ax.add_line(line)
 
+
+
 def subsequence(X):
     """Returns the Longest Increasing Subsequence in the Given List/Array"""
     N = len(X)
@@ -72,9 +74,10 @@ def gen_xyrs(frames):
 
 if __name__ == "__main__":
     #print cv2.__version__
-    frames  = video.readVideo(sys.argv[1], 2000);
+    frames  = video.readVideo(sys.argv[1]);
     figure()
     datax,datay = gen_xyrs(frames)
+    # filter on x
     segments = segment.topdownsegment(datax.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
     pts = []
     for i in range(len(segments)):
@@ -88,7 +91,46 @@ if __name__ == "__main__":
         for i in range(len(bbb)):
             bbb[i] = bbb[i] + st
         pts = pts + bbb
-    plot_points(datax,pts)
+    print len(pts)
+
+    # filter on y
+    print len(datay)
+    datay1 = datay[pts]
+    print len(datay1)
+    segments = segment.topdownsegment(datay1.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
+    pts1 = []
+    for i in range(len(segments)):
+        seg = segments[i]
+        st = seg[0]
+        ed = seg[2]
+        if seg[3] > seg[1]:
+            aaa, bbb = subsequence(datay1[st:ed])
+        else:
+            aaa, bbb = subsequence(-datay1[st:ed])
+        for i in range(len(bbb)):
+            bbb[i] = bbb[i] + st
+        pts1 = pts1 + bbb
+
+    pts2 = [pts[pts1[0]]]
+    cur = pts2[-1]
+    for i in range(1,len(pts1)):
+        if pts[pts1[i]] - cur > 5:
+            pts2.append(pts[pts1[i]])
+            cur = pts2[-1]
+    print len(pts2)
+    print pts2
+    plot_points(datax,pts2)
+    plot_points(datay,pts2)
+    plt_show()
+
+    # show frames
+    i = 0
+    while True:
+        cv2.imshow('aaa',frames[pts2[i]])
+        cv2.waitKey(20)
+        i = i+1
+        if i >= len(pts2):
+            i = 0
 
 '''
     segments = segment.topdownsegment(datay.tolist(), fit.interpolate, fit.sumsquared_error, max_error)
